@@ -12,5 +12,4 @@ var mobApi = {
   queryCityCode:function(){
     return this.baseUrl +"search?key=2820369744a80&pid=40&cid=4001&word=安康";
   }
-
 }
