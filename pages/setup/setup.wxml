@@ -1,2 +1,16 @@
-<!--pages/setup/setup.wxml-->
-<text>pages/setup/setup.wxml</text>
+<view class="setup">
+  <form bindsubmit="formSubmit">
+    <view class="title" style="display: flex; height: 80rpx;">
+      <text style="height: 80rpx; line-height: 80rpx; margin-right: 3rpx;">方案名称：</text>
+      <input class="input_title" type="text" placeholder="请输入方案名称" />
+    </view>
+    <view class="container">
+      <canvas canvas-id="myCanvas" style="width:600px; height:400px; border: 1px solid #ffffff;" bindtouchend="lineTouched"></canvas>
+    </view>
+    <view class="submit_btn">
+      <button class="btn" bindtap="savePlan(1)" type="primary" size="mini">保存方案</button>
+      <button class="btn" bindtap="savePlan(0)" type="primary" size="mini">保存并启用方案</button>
+      <button class="btn" bindtap="reset" type="default" size="mini">重置方案</button>
+    </view>
+  </form>
+</view>

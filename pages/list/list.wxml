@@ -6,19 +6,19 @@
           <input type="text" placeholder="方案名称" class="input-top" disabled />
           <input type="text" placeholder="状态" class="input-top" disabled />
           <input type="text" placeholder="创建日期" class="input-top" disabled />
-          <input type="text" placeholder="操作" class="input-top end " disabled />
+          <input type="text" placeholder="操作" class="input-top end" disabled />
         </view>
         <view class="section2">
-          <block wx:for="{{planList}}" :wx-key="{{index}}">
+          <block wx:for="{{planList}}" wx:key="{{index}}">
             <view>
               <input type="text" placeholder="{{item.name}}" class="input2 " maxlength='11' disabled />
               <input type="text" placeholder="{{item.disabled_name}}" class="input2" maxlength='11' disabled />
               <input type="text" placeholder="{{item.created_at}}" class="input2" maxlength='11' disabled />
             </view>
             <view class="input2 end2" style='display: flex'>
-              <button type='default' size='mini'>禁用</button>
-              <button type='primary' size='mini'>修改</button>
-              <button type='warn' size='mini'>删除</button>
+              <button bindtap="handleClick" type='default' size='mini'>禁用</button>
+              <button bindtap="toCheck" type='primary' size='mini'>修改</button>
+              <button bindtap="toDel" type='warn' size='mini'>删除</button>
             </view>
           </block>
           

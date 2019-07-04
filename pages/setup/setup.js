@@ -1,4 +1,6 @@
-// pages/setup/setup.js
+let WxChart = require("../../dist/wx-chart.min.js");
+
+
 Page({
 
   /**

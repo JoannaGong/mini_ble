@@ -12,11 +12,12 @@ var mobApi = {
   }
 }
 
-const domain = 'https://keboard.zkong.me/api/plans'
+const domain = 'https://keboard.zkong.me/api'
 
 const interfaces = {
-  listpage: domain,
-  setuppage: domain + '/tree'
+  listpage: domain + '/plans',
+  setPlan: domain + '/setPlan',
+  
 }
 
 module.exports = interfaces;

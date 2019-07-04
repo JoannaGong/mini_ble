@@ -18,13 +18,13 @@ Page({
     wx.showLoading({
       title: '加载中...'
     })
-    
+
     wx.request({
       header: {
         'content-type': 'application/json'
       },
       url: interfaces.listpage,
-      success(res){
+      success(res) {
         console.log(res)
         let planList = res.data;
 
@@ -44,52 +44,51 @@ Page({
     })
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
+  handleClick(e) {
+    // const index = e.currentTarget.dataset.index;
+    // const id = this.data.cartArray[index].id
+    const id = e.id
+    const disabled = e.disabled === 0 ? 1 : 0;
+    const msg = row.disabled === 0 ? '禁用成功' : '启用成功'
+    const params = {
+      id, disabled
+    }
+    let planList = this.planList;
+
+    wx.request({
+      header: {
+        'content-type': 'application/json'
+      },
+      url: interfaces.setPlan,
+      success(res) {
+        console.log(res)
+        planList.forEach(item => {
+          if (item.id === id) {
+            item.disabled = item.disabled === 0 ? 1 : 0;
+            item.disabled_name = item.disabled === 0 ? "启用" : "禁用"
+          } else {
+            item.disabled = 1
+            item.disabled_name = "禁用"
+          }
+        })
+        this.planList = planList;
+        Message({
+          message: msg,
+          type: 'success',
+          duration: 2 * 1000
+        })
+        wx.hideLoading()
+      }
+    })
+  },
+
+  toCheck(e) {
 
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
+  toDel(e) {
 
   }
+
+
 })

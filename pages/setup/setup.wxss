@@ -1,1 +1,21 @@
-/* pages/setup/setup.wxss */
+.setup {
+    margin: 5px;
+}
+
+
+.input_title {
+    border: 1px solid #eee;
+    width: 75%;
+    height: 80rpx;
+    margin-top: 10rpx;
+}
+
+.submit_btn {
+    display: flex;
+    margin-top: 30rpx;
+}
+
+/* .btn {
+    margin: 2rpx 5rpx;
+    padding: 2rpx 18rpx;
+} */
