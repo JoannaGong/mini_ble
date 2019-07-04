@@ -1,0 +1,99 @@
+.list {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/*表格布局  */
+.table{
+  border: 1px solid gray;
+  width: 730rpx;
+  text-align: center;
+}
+/*第一行样式  */
+.section-top {
+  display: flex;
+  width: 730rpx;
+  flex-direction: row;
+}
+
+.input-top {
+  border-right: 1px solid gray;
+  height: 55rpx;
+  width: 150rpx;
+  color: #000;
+  font-weight: 800;
+  font-size: 14px;
+}
+.end{
+  border-right: 0px;
+}
+/*第二行样式  */
+.section2 {
+  display: flex;
+  width: 730rpx;
+  border-top: 1px solid gray;
+  flex-direction: row;
+}
+
+.input2 {
+  border-right: 1px solid gray;
+  height: 52rpx;
+  width: 150rpx;
+  color: #000;
+  font-size: 14px;
+}
+.end2{
+  width:274rpx;
+  border-right: 0px;
+  padding-top: 2rpx;
+}
+.end2 button {
+  font-size: 12px;
+  padding: 2rpx 18rpx;
+  height: 48rpx;
+}
+
+/*表格最左列名称  */
+
+.input-left1 {
+  border: 1px solid gray;
+  height: 50rpx;
+  width: 170rpx;
+  color: #000;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+
+.input-text {
+  border: 1px solid gray;
+  height: 30px;
+  width: 20px;
+  color: #000;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.inputtwo {
+  margin-top: 2%;
+}
+
+.buttonAll {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 35rpx;
+  margin-bottom: 50rpx;
+}
+
+.submitone {
+  vertical-align: middle;
+  display: table-cell;
+}
+
+.submittwo {
+  vertical-align: middle;
+  display: table-cell;
+}

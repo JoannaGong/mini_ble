@@ -324,13 +324,4 @@ Page({
       }
     })
   },
-
-  //关于
-  aboutClick: function() {
-    wx.navigateTo({
-      url: '/pages/about/about'
-    });
-  }
-
-
 })

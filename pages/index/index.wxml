@@ -13,7 +13,7 @@
   <view class='log'>
     <view>展示log日志(可滑动查看)：</view>
     <view>
-      <scroll-view scroll-y="true" class='text-box scroll-list'>
+      <scroll-view scroll-y="true" class='text-box scroll-list' style="text-align: left; padding-left: 6px">
         <text>{{textLog}}</text>
       </scroll-view>
     </view>
@@ -32,6 +32,4 @@
       <view style="font-size: 10px">Service数量: {{utils.len(item.advertisServiceUUIDs)}}</view>
     </view>
   </scroll-view>
-
-  <image class='about-img' src='../../images/about.png' bindtap='aboutClick'></image>
 </view>

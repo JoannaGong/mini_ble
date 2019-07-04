@@ -1,7 +1,9 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/functionPage/functionPage"
+    "pages/functionPage/functionPage",
+    "pages/list/list",
+    "pages/setup/setup"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -9,6 +11,26 @@
     "navigationBarTitleText": "蓝牙调试工具",
     "navigationBarTextStyle": "white",
     "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#515151",
+    "backgroundColor": "#fff",
+    "list": [{
+      "pagePath": "pages/index/index",
+      "text": "蓝牙",
+      "iconPath": "images/ble2.png",
+      "selectedIconPath": "images/ble1.png"
+    },{
+      "pagePath": "pages/setup/setup",
+      "text": "方案",
+      "iconPath": "images/setup2.png",
+      "selectedIconPath": "images/setup1.png"
+    },{
+      "pagePath": "pages/list/list",
+      "text": "列表",
+      "iconPath": "images/list2.png",
+      "selectedIconPath": "images/list1.png"
+    }]
   },
   "sitemapLocation": "sitemap.json"
 }

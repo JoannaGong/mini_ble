@@ -1,5 +1,3 @@
-
-
 var mobApi = {
   baseUrl: "https://apicloud.mob.com/v1/postcode/",
   myKey:"2820369744a80",
@@ -13,3 +11,12 @@ var mobApi = {
     return this.baseUrl +"search?key=2820369744a80&pid=40&cid=4001&word=安康";
   }
 }
+
+const domain = 'https://keboard.zkong.me/api/plans'
+
+const interfaces = {
+  listpage: domain,
+  setuppage: domain + '/tree'
+}
+
+module.exports = interfaces;
