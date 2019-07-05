@@ -3,12 +3,12 @@
     "pages/index/index",
     "pages/functionPage/functionPage",
     "pages/list/list",
-    "pages/setup/setup"
+    "pages/plan/plan"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#179B16",
-    "navigationBarTitleText": "蓝牙调试工具",
+    "navigationBarTitleText": "连 接 蓝 牙",
     "navigationBarTextStyle": "white",
     "backgroundColor": "#F8F8F8"
   },
@@ -21,7 +21,7 @@
       "iconPath": "images/ble2.png",
       "selectedIconPath": "images/ble1.png"
     },{
-      "pagePath": "pages/setup/setup",
+      "pagePath": "pages/plan/plan",
       "text": "方案",
       "iconPath": "images/setup2.png",
       "selectedIconPath": "images/setup1.png"

@@ -1,0 +1,17 @@
+.plan {
+    margin: 5px;
+    font-size: 14px;
+}
+
+.input_title {
+    border: 1px solid #eee;
+    width: 78%;
+    height: 60rpx;
+    margin: 10rpx 0;
+}
+
+.submit_btn {
+    display: flex;
+    height: 60rpx;
+    margin: 10rpx 0;
+}

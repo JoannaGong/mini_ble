@@ -1,94 +1,99 @@
 const interfaces = require('../../utils/data.js')
 
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-    planList: []
+    planList: [],
+    id: '',
+    disabled: '',
+    disabled_name: '',
+    noData: false   // 是否有更多数据
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
+  onShow: function () {
     const self = this
-
     wx.showLoading({
       title: '加载中...'
     })
-
     wx.request({
       header: {
         'content-type': 'application/json'
       },
       url: interfaces.listpage,
       success(res) {
-        console.log(res)
-        let planList = res.data;
-
-        planList.forEach(item => {
-          let point = "";
-          let content = item.content;
-          content.forEach(item => {
-            point = point + item.id + ","
-          })
-          point = point.substring(0, point.length - 1)
-          item.point = point;
+        self.setData({
+          planList: res.data.data
         })
-
-        this.planList = planList;
         wx.hideLoading()
       }
     })
   },
 
+  // 启用/禁用切换
   handleClick(e) {
-    // const index = e.currentTarget.dataset.index;
-    // const id = this.data.cartArray[index].id
-    const id = e.id
-    const disabled = e.disabled === 0 ? 1 : 0;
-    const msg = row.disabled === 0 ? '禁用成功' : '启用成功'
-    const params = {
-      id, disabled
-    }
-    let planList = this.planList;
-
+    const self = this
+    let index = e.currentTarget.dataset.index
+    let planList = self.data.planList
+    planList.forEach(item => {
+      if (item.id === e.currentTarget.dataset.id) {
+        item.disabled = e.currentTarget.dataset.disabled === 0 ? 1 : 0
+        item.disabled_name = e.currentTarget.dataset.disabled === 1 ? '启用' : '禁用'
+      }
+    })
     wx.request({
+      method: 'POST',
       header: {
-        'content-type': 'application/json'
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+        id: e.currentTarget.dataset.id,
+        disabled: planList[index].disabled
       },
       url: interfaces.setPlan,
       success(res) {
-        console.log(res)
-        planList.forEach(item => {
-          if (item.id === id) {
-            item.disabled = item.disabled === 0 ? 1 : 0;
-            item.disabled_name = item.disabled === 0 ? "启用" : "禁用"
-          } else {
-            item.disabled = 1
-            item.disabled_name = "禁用"
-          }
-        })
-        this.planList = planList;
-        Message({
-          message: msg,
-          type: 'success',
-          duration: 2 * 1000
+        self.setData({
+          planList: planList,
         })
         wx.hideLoading()
       }
     })
   },
 
+  // 修改
   toCheck(e) {
 
   },
 
+  // 删除
   toDel(e) {
-
+    const self = this;
+    wx.showModal({
+      content: '确定要删除该方案吗？',
+      success: function (res) {
+        if (res.confirm) {
+          wx.showLoading({ title: '正在删除' });
+          wx.request({
+            url: interfaces.delPlan + e.currentTarget.dataset.id,
+            data: {
+              id: e.currentTarget.dataset.id
+            },
+            method: 'delete',
+            success(res) {
+              if (res.statusCode != 200) {
+                return;
+              } else {
+                wx.showToast({
+                  title: '删除成功！',
+                  icon: 'success',
+                  duration: 2000
+                })
+              }
+              self.setData({
+                planList: res.data.data
+              })
+            }
+          })
+        }
+      }
+    })
   }
-
-
 })

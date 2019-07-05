@@ -1,99 +1,56 @@
-.list {
-  margin-top: 5px;
+.tr {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  height: 2.5rem;
   align-items: center;
+  font-size: 14px;
 }
 
-/*表格布局  */
-.table{
-  border: 1px solid gray;
-  width: 730rpx;
+.tr:nth-child(2n) {
+  background: #fff;
+}
+
+.td {
+  justify-content: center;
   text-align: center;
-}
-/*第一行样式  */
-.section-top {
-  display: flex;
-  width: 730rpx;
-  flex-direction: row;
-}
-
-.input-top {
-  border-right: 1px solid gray;
-  height: 55rpx;
-  width: 150rpx;
-  color: #000;
-  font-weight: 800;
-  font-size: 14px;
-}
-.end{
-  border-right: 0px;
-}
-/*第二行样式  */
-.section2 {
-  display: flex;
-  width: 730rpx;
-  border-top: 1px solid gray;
-  flex-direction: row;
-}
-
-.input2 {
-  border-right: 1px solid gray;
-  height: 52rpx;
-  width: 150rpx;
-  color: #000;
-  font-size: 14px;
-}
-.end2{
-  width:274rpx;
-  border-right: 0px;
-  padding-top: 2rpx;
-}
-.end2 button {
   font-size: 12px;
-  padding: 2rpx 18rpx;
-  height: 48rpx;
 }
 
-/*表格最左列名称  */
+.td1 {
+  width: 27%;
+}
 
-.input-left1 {
-  border: 1px solid gray;
-  height: 50rpx;
-  width: 170rpx;
+.td2 {
+  width: 10%;
+
+}
+
+.td3 {
+  width: 25%;
+}
+
+.td4 {
+  width: 28%;
+}
+
+.btn {
+  margin: 0 8rpx;
+}
+
+.bg-w {
+  background: lightblue;
   color: #000;
-  font-weight: 800;
-  font-size: 14px;
-}
-
-
-.input-text {
-  border: 1px solid gray;
-  height: 30px;
-  width: 20px;
-  color: #000;
-  font-weight: 800;
-  font-size: 14px;
-}
-
-.inputtwo {
-  margin-top: 2%;
-}
-
-.buttonAll {
   width: 100%;
+}
+
+.bg-g {
+  background: #e6f3f9;
+  color: #222;
+}
+
+.th {
+  justify-content: center;
   display: flex;
-  justify-content: space-between;
-  margin-top: 35rpx;
-  margin-bottom: 50rpx;
-}
-
-.submitone {
-  vertical-align: middle;
-  display: table-cell;
-}
-
-.submittwo {
-  vertical-align: middle;
-  display: table-cell;
+  height: 2.5rem;
+  align-items: center;
 }
