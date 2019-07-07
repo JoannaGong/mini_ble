@@ -60,7 +60,11 @@ Page({
 
   // 修改
   toCheck(e) {
-
+    console.log(e)
+    let id = e.currentTarget.dataset.id
+    wx.navigateTo({
+      // url: interfaces.listpage + '?id=' + id
+    })
   },
 
   // 删除

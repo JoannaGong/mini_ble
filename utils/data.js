@@ -15,9 +15,14 @@ var mobApi = {
 const domain = 'https://keboardapi.zkong.me/api'
 
 const interfaces = {
+  // 方案列表
   listpage: domain + '/plans',
+  // 设置方案
   setPlan: domain + '/setPlan',
-  delPlan: domain + '/plans/'
+  // 删除方案
+  delPlan: domain + '/plans/',
+  // 修改方案
+  amendPlan: domain + '/plans'
 }
 
 module.exports = interfaces;

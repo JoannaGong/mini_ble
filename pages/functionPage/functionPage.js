@@ -68,8 +68,9 @@ Page({
   },
   //返回蓝牙是否正处于链接状态
   onBLEConnectionStateChange:function (onFailCallback) {
+    console.log(onFailCallback)
     wx.onBLEConnectionStateChange(function (res) {
-      // 该方法回调中可以用于处理连接意外断开等异常情况
+      // 该方法回调中可以用于处理连接意外断开等异常情况 
       console.log(`device ${res.deviceId} state has changed, connected: ${res.connected}`);
       return res.connected;
     });

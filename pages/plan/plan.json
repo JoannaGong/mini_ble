@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "设 置 方 案"
+  "navigationBarTitleText": "设 置 方 案",
+  "usingComponents": {
+    "ec-canvas": "../../ec-canvas/ec-canvas"
+  }
 }

@@ -17,20 +17,20 @@
 }
 
 .td1 {
-  width: 27%;
+  width: 200.5rpx;
 }
 
 .td2 {
-  width: 10%;
+  width: 75rpx;
 
 }
 
 .td3 {
-  width: 25%;
+  width: 187.5rpx;
 }
 
 .td4 {
-  width: 28%;
+  width: 212rpx;
 }
 
 .btn {
