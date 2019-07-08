@@ -5,12 +5,17 @@
       <input class="input_title" type="text" placeholder="请输入方案名称" />
     </view>
     <view class="container">
-      <ec-canvas id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ ec }}"></ec-canvas>
+      <ec-canvas id="mychart-dom" canvas-id="mychart-multi-scatter" ec="{{ ec }}"></ec-canvas>
     </view>
-    <view class="submit_btn">
+    <view class="submit_btn" wx:if="{{!planId}}">
       <button class="btn" bindtap="savePlan(1)" type="primary" size="mini">保存方案</button>
       <button class="btn" bindtap="savePlan(0)" type="primary" size="mini">保存并启用方案</button>
       <button class="btn" bindtap="reset" type="default" size="mini">重置方案</button>
+    </view>
+    <view class="submit_btn" wx:else>
+      <button class="btn" data-disabled="1" bindtap="amend" type="primary" size="mini">保存修改</button>
+      <button class="btn" data-disabled="0" bindtap="amend" type="primary" size="mini">保存修改并启用方案</button>
+      <button class="btn" bindtap="back" type="default" size="mini">返回列表</button>
     </view>
   </form>
 </view>

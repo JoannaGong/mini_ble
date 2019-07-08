@@ -23,6 +23,7 @@ Page({
         self.setData({
           planList: res.data.data
         })
+        // console.log(self.data.planList)
         wx.hideLoading()
       }
     })
@@ -31,27 +32,37 @@ Page({
   // 启用/禁用切换
   handleClick(e) {
     const self = this
-    let index = e.currentTarget.dataset.index
+    const msg = e.currentTarget.dataset.disabled === 0 ? '禁用成功' : '启用成功'
     let planList = self.data.planList
-    planList.forEach(item => {
-      if (item.id === e.currentTarget.dataset.id) {
-        item.disabled = e.currentTarget.dataset.disabled === 0 ? 1 : 0
-        item.disabled_name = e.currentTarget.dataset.disabled === 1 ? '启用' : '禁用'
-      }
-    })
+    const disabled = e.currentTarget.dataset.disabled === 0 ? 1 : 0
+    const id = e.currentTarget.dataset.id
+    const params = {
+      id,disabled
+    }
     wx.request({
       method: 'POST',
       header: {
         'content-type': 'application/x-www-form-urlencoded'
       },
-      data: {
-        id: e.currentTarget.dataset.id,
-        disabled: planList[index].disabled
-      },
+      data: params,
       url: interfaces.setPlan,
       success(res) {
+        planList.forEach(item => {
+          if (item.id === id) {
+            item.disabled = item.disabled === 0 ? 1 : 0
+            item.disabled_name = item.disabled === 0 ? '启用' : '禁用'
+          }else {
+            item.disabled = 1
+            item.disabled_name = "禁用"
+          }
+        })
         self.setData({
           planList: planList,
+        })
+        wx.showToast({
+          title: msg,
+          icon: 'success',
+          duration: 1000
         })
         wx.hideLoading()
       }
@@ -60,10 +71,15 @@ Page({
 
   // 修改
   toCheck(e) {
-    console.log(e)
-    let id = e.currentTarget.dataset.id
-    wx.navigateTo({
-      // url: interfaces.listpage + '?id=' + id
+    // console.log(e)
+    getApp().globalData.planId = e.currentTarget.dataset.id
+    getApp().globalData.pointIdArr = e.currentTarget.dataset.content
+    getApp().globalData.planName = e.currentTarget.dataset.name
+    wx.switchTab({
+      url: '../plan/plan',
+      success(res){
+        // console.log(res)
+      }
     })
   },
 
@@ -82,18 +98,19 @@ Page({
             },
             method: 'delete',
             success(res) {
-              if (res.statusCode != 200) {
-                return;
-              } else {
+              if (res.statusCode === 200) {
                 wx.showToast({
                   title: '删除成功！',
                   icon: 'success',
                   duration: 2000
                 })
+                let index = self.data.planList.findIndex(item => item.id === e.currentTarget.dataset.id)
+                let planList = self.data.planList
+                planList.splice(index, 1)
+                self.setData({
+                  planList: planList
+                })
               }
-              self.setData({
-                planList: res.data.data
-              })
             }
           })
         }
