@@ -21,6 +21,11 @@
       "iconPath": "images/ble2.png",
       "selectedIconPath": "images/ble1.png"
     },{
+      "pagePath": "pages/functionPage/functionPage",
+      "text": "指令",
+      "iconPath": "images/ble2.png",
+      "selectedIconPath": "images/ble1.png"
+    },{
       "pagePath": "pages/plan/plan",
       "text": "方案",
       "iconPath": "images/setup2.png",

@@ -140,7 +140,6 @@ Page({
     })
     //监听蓝牙适配器状态变化事件
     wx.onBluetoothAdapterStateChange(function(res) {
-      console.log('onBluetoothAdapterStateChange', res)
       var isDvailable = res.available; //蓝牙适配器是否可用
       if (isDvailable) {
         that.getBluetoothAdapterState();
@@ -260,6 +259,9 @@ Page({
       deviceId: devId,
       success: function(res) {
         wx.hideLoading(); //隐藏loading
+        wx.switchTab({
+          url: '../functionPage/functionPage',
+        })
         var log = that.data.textLog + "配对成功,获取服务..\n";
         that.setData({
           textLog: log,
@@ -267,7 +269,12 @@ Page({
           name,
           devId,
         });
+        getApp().globalData.textlog = that.data.textLog
+        getApp().globalData.name = that.data.name
+        getApp().globalData.devId = that.data.devId
+
         that.getBLEDeviceServices(devId)
+        
       },
 
       fail: function(err) {

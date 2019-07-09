@@ -113,7 +113,7 @@ App({
 
   globalData: {
     userInfo: null,
-    sysinfo: null
+    sysinfo: null,
   }
 
 

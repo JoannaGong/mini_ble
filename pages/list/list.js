@@ -1,4 +1,5 @@
 const interfaces = require('../../utils/data.js')
+var app = getApp();
 
 Page({
   data: {
@@ -39,6 +40,14 @@ Page({
     const params = {
       id,disabled
     }
+    
+    // 将某个方案里具体id值连接成字符串，并以z开头，以;结尾
+    const content = e.currentTarget.dataset.content
+    let temp = [];
+    content.forEach(item => {
+      temp.push(item.id)
+    })
+
     wx.request({
       method: 'POST',
       header: {
@@ -64,6 +73,12 @@ Page({
           icon: 'success',
           duration: 1000
         })
+
+        getApp().globalData.orderPlan = 'z' + temp.join(",") + ',;'
+        console.log(getApp().globalData.orderPlan)
+        wx.switchTab({
+          url: '../functionPage/functionPage',
+        })
         wx.hideLoading()
       }
     })
@@ -75,6 +90,7 @@ Page({
     getApp().globalData.planId = e.currentTarget.dataset.id
     getApp().globalData.pointIdArr = e.currentTarget.dataset.content
     getApp().globalData.planName = e.currentTarget.dataset.name
+    console.log(e.currentTarget.dataset.content)
     wx.switchTab({
       url: '../plan/plan',
       success(res){

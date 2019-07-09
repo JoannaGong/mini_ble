@@ -16,7 +16,7 @@ Page({
     writeCharacteristicId: "",
     notifyCharacteristicId: "",
     connected: true,
-    canWrite: false
+    canWrite: false,
   },
 
   /**
@@ -32,7 +32,7 @@ Page({
       textLog: log,
       deviceId: devid,
       name: devname,
-      serviceId: devserviceid 
+      serviceId: devserviceid
     });
     //获取特征值
     that.getBLEDeviceCharacteristics();
@@ -42,6 +42,14 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    this.setData({
+      textLog: getApp().globalData.textlog,
+      name: getApp().globalData.name,
+      deviceId: getApp().globalData.devId,
+      // orderInputStr: getApp().globalData.orderPlan
+    })
+    // console.log(orderInputStr)
+
     if (wx.setKeepScreenOn) {
       wx.setKeepScreenOn({
         keepScreenOn: true,
@@ -68,7 +76,6 @@ Page({
   },
   //返回蓝牙是否正处于链接状态
   onBLEConnectionStateChange:function (onFailCallback) {
-    console.log(onFailCallback)
     wx.onBLEConnectionStateChange(function (res) {
       // 该方法回调中可以用于处理连接意外断开等异常情况 
       console.log(`device ${res.deviceId} state has changed, connected: ${res.connected}`);
@@ -83,7 +90,6 @@ Page({
     })
     that.setData({
       connected: false,
-
     });
     wx.showToast({
       title: '连接已断开',
@@ -158,17 +164,17 @@ Page({
           wx.hideToast();
         }, 2000)
       }
-
     })
 
   },
   //监听低功耗蓝牙设备的特征值变化。必须先启用notify接口才能接收到设备推送的notification。
   onBLECharacteristicValueChange:function(){
     var that = this;
+    
     wx.onBLECharacteristicValueChange(function (res) {
       var resValue = utils.ab2hext(res.value); //16进制字符串
       var resValueStr = utils.hexToString(resValue);
-  
+      
       var log0 = that.data.textLog + "成功获取：" + resValueStr + "\n";
       that.setData({
         textLog: log0,

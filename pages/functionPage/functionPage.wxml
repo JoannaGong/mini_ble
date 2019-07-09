@@ -1,5 +1,3 @@
-<!--pages/funtionPage/funtionPage.wxml-->
-
 <view class='bluetooth-detail'>
   <view>当前连接的蓝牙设备是：</view>
   <view>设备名：{{name}}</view>
@@ -19,7 +17,7 @@
 <!-- 底部按钮 -->
 <view class='function-button-div'>
   <view class='function-input'>
-    <input class="input" type="text" cursor-spacing="20" bindinput="orderInput" placeholder="请输入指令" value='{{accountInputStr}}' />
+    <input class="input" type="text" cursor-spacing="20" maxlength="-1" bindinput="orderInput" placeholder="请输入指令" value='{{accountInputStr}}' />
     <button bindtap='sentOrder'>发送</button>
   </view>
 
@@ -27,6 +25,4 @@
      <button type="primary" class='function-button_left' bindtap="startClear">清空log日志</button>
     <button type="primary" class='function-button_right' bindtap="closeBLEConnection">断开蓝牙连接</button>
   </view>
-
-
 </view>
