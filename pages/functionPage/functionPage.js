@@ -16,7 +16,8 @@ Page({
     writeCharacteristicId: "",
     notifyCharacteristicId: "",
     connected: true,
-    canWrite: false
+    canWrite: false,
+    orderPlan: ''
   },
 
   /**
@@ -24,19 +25,6 @@ Page({
    */
   onLoad: function (options) {
 
-    // var that = this;
-    // var devid = decodeURIComponent(options.deviceId);
-    // var devname = decodeURIComponent(options.name);
-    // var devserviceid = decodeURIComponent(options.serviceId);
-    // var log = that.data.textLog + "设备名=" + devname +"\n设备UUID="+devid+"\n服务UUID="+devserviceid+ "\n";
-    // this.setData({
-    //   textLog: log,
-    //   deviceId: devid,
-    //   name: devname,
-    //   serviceId: devserviceid 
-    // });
-    // //获取特征值
-    // that.getBLEDeviceCharacteristics();
   },
 
   /**
@@ -52,8 +40,11 @@ Page({
       textLog: log,
       deviceId: devid,
       name: devname,
-      serviceId: devserviceid
+      serviceId: devserviceid,
+      orderPlan: app.globalData.orderPlan,
+      accountInputStr: app.globalData.orderPlan,
     });
+    
     //获取特征值
     that.getBLEDeviceCharacteristics();
 
@@ -191,11 +182,25 @@ Page({
   },
 
   //发送指令
-  sentOrder: function () {
+  sentOrder: function (e) {
     var that = this;
-    var orderStr = that.data.orderInputStr;//指令
+    if(this.data.orderPlan){
+      var orderStr = this.data.orderPlan;//指令
+    }else{
+      var orderStr = that.data.orderInputStr;//指令
+    }
     let order = utils.stringToBytes(orderStr);
     that.writeBLECharacteristicValue(order);
+    wx.showToast({
+      title: '发送成功！',
+      icon: 'success',
+      duration: 500
+    })
+    setTimeout(()=>{
+      this.setData({
+        accountInputStr: ''
+      })
+    }, 1000)
   },
 
   //向低功耗蓝牙设备特征值中写入二进制数据。

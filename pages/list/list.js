@@ -60,6 +60,12 @@ Page({
           if (item.id === id) {
             item.disabled = item.disabled === 0 ? 1 : 0
             item.disabled_name = item.disabled === 0 ? '启用' : '禁用'
+            if(item.disabled === 0){
+              getApp().globalData.orderPlan = 'z' + temp.join(",") + ',;'
+              wx.switchTab({
+                url: '../functionPage/functionPage',
+              })
+            }
           }else {
             item.disabled = 1
             item.disabled_name = "禁用"
@@ -74,12 +80,12 @@ Page({
           duration: 1000
         })
 
-        if(planList[index].disabled === 0){
-          getApp().globalData.orderPlan = 'z' + temp.join(",") + ',;'
-          wx.switchTab({
-            url: '../functionPage/functionPage',
-          })
-        }
+        // if(planList[index].disabled === 0){
+        //   getApp().globalData.orderPlan = 'z' + temp.join(",") + ',;'
+        //   wx.switchTab({
+        //     url: '../functionPage/functionPage',
+        //   })
+        // }
         wx.hideLoading()
       }
     })
