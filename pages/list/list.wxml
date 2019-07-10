@@ -14,7 +14,7 @@
             <view class="td td2">{{item.disabled_name}}</view>
             <view class="td td3">{{item.created_at}}</view>
             <view class='td td4' style='display: flex;'>
-              <view data-id="{{item.id}}" data-disabled="{{item.disabled}}" data-content="{{item.content}}" bindtap='handleClick' class='btn'>{{item.disabled === 1 ? '启用' : '禁用'}}</view>
+              <view data-id="{{item.id}}" data-index="{{index}}" data-disabled="{{item.disabled}}" data-content="{{item.content}}" bindtap='handleClick' class='btn'>{{item.disabled === 1 ? '启用' : '禁用'}}</view>
               <view data-id="{{item.id}}" data-name="{{item.name}}" data-content="{{item.content}}" bindtap='toCheck' class='btn'>修改</view>
               <view data-id="{{item.id}}" data-index="{{index}}" bindtap='toDel' class='btn'>删除</view>
             </view>

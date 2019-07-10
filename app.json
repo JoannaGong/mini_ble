@@ -23,8 +23,8 @@
     },{
       "pagePath": "pages/functionPage/functionPage",
       "text": "指令",
-      "iconPath": "images/ble2.png",
-      "selectedIconPath": "images/ble1.png"
+      "iconPath": "images/command2.png",
+      "selectedIconPath": "images/command1.png"
     },{
       "pagePath": "pages/plan/plan",
       "text": "方案",

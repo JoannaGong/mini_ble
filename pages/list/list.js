@@ -24,7 +24,6 @@ Page({
         self.setData({
           planList: res.data.data
         })
-        // console.log(self.data.planList)
         wx.hideLoading()
       }
     })
@@ -43,6 +42,7 @@ Page({
     
     // 将某个方案里具体id值连接成字符串，并以z开头，以;结尾
     const content = e.currentTarget.dataset.content
+    const index = e.currentTarget.dataset.index
     let temp = [];
     content.forEach(item => {
       temp.push(item.id)
@@ -74,11 +74,12 @@ Page({
           duration: 1000
         })
 
-        getApp().globalData.orderPlan = 'z' + temp.join(",") + ',;'
-        console.log(getApp().globalData.orderPlan)
-        wx.switchTab({
-          url: '../functionPage/functionPage',
-        })
+        if(planList[index].disabled === 0){
+          getApp().globalData.orderPlan = 'z' + temp.join(",") + ',;'
+          wx.switchTab({
+            url: '../functionPage/functionPage',
+          })
+        }
         wx.hideLoading()
       }
     })
@@ -86,11 +87,9 @@ Page({
 
   // 修改
   toCheck(e) {
-    // console.log(e)
     getApp().globalData.planId = e.currentTarget.dataset.id
     getApp().globalData.pointIdArr = e.currentTarget.dataset.content
     getApp().globalData.planName = e.currentTarget.dataset.name
-    console.log(e.currentTarget.dataset.content)
     wx.switchTab({
       url: '../plan/plan',
       success(res){
