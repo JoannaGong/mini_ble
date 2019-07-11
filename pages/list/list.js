@@ -93,9 +93,9 @@ Page({
 
   // 修改
   toCheck(e) {
-    getApp().globalData.planId = e.currentTarget.dataset.id
-    getApp().globalData.pointIdArr = e.currentTarget.dataset.content
-    getApp().globalData.planName = e.currentTarget.dataset.name
+    app.globalData.planId = e.currentTarget.dataset.id
+    app.globalData.pointIdArr = e.currentTarget.dataset.content
+    app.globalData.planName = e.currentTarget.dataset.name
     wx.switchTab({
       url: '../plan/plan',
       success(res){

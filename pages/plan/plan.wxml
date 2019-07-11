@@ -5,7 +5,7 @@
       <input class="input_title" type="text" placeholder="请输入方案名称" />
     </view>
     <view class="container">
-      <ec-canvas id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ ec }}"></ec-canvas>
+      <ec-canvas id="mychart" canvas-id="mychart-scatter" ec="{{ ec }}"></ec-canvas>
     </view>
     <view class="submit_btn" wx:if="{{!planId}}">
       <button class="btn" data-disabled="1" bindtap="savePlan" type="primary" size="mini">保存方案</button>
