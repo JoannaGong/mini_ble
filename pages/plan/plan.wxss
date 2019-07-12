@@ -6,8 +6,7 @@
   width: 746rpx;
   height: 1200rpx;
   background: #999;
-  padding-top: 20rpx;
-  padding: 20rpx 2rpx;
+  padding: 20rpx 2rpx 5rpx;
 } 
 
 ec-canvas {
@@ -22,13 +21,12 @@ ec-canvas {
   margin: 10rpx 0;
 }
 
-.submit_btn {
+.footer {
   display: flex;
-  height: 60rpx;
-  margin: 20rpx 0;
-}
-
-.submit_btn .btn {
-  height: 60rpx;
-  line-height: 60rpx;
+  justify-content: space-evenly;
+  margin: 10rpx 0;
+  padding: 0 5rpx;
+  /* height: 60rpx;
+  padding: 0 18rpx;
+  line-height: 60rpx; */
 }

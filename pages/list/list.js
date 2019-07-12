@@ -29,6 +29,10 @@ Page({
     })
   },
 
+  sortNum(a, b){
+    return a-b
+  },
+
   // 启用/禁用切换
   handleClick(e) {
     const self = this
@@ -47,7 +51,8 @@ Page({
     content.forEach(item => {
       temp.push(item.id)
     })
-
+    temp = temp.sort(this.sortNum)
+    
     wx.request({
       method: 'POST',
       header: {
@@ -62,6 +67,7 @@ Page({
             item.disabled_name = item.disabled === 0 ? '启用' : '禁用'
             if(item.disabled === 0){
               getApp().globalData.orderPlan = 'z' + temp.join(",") + ',;'
+              console.log(getApp().globalData.orderPlan)
               wx.switchTab({
                 url: '../functionPage/functionPage',
               })
