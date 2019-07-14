@@ -3,11 +3,9 @@
     <text style="height: 80rpx; line-height: 80rpx; margin-right: 3rpx;">方案名称：</text>
     <input class="input_title" type="text" placeholder="请输入方案名称" bindinput="getPlanName" value="{{planName}}" />
   </view>
-  <!-- <scroll-view scroll-y class="scrollEcharts"> -->
-    <view class="container">
-      <ec-canvas id="mychart" canvas-id="mychart-scatter" ec="{{ ec }}"></ec-canvas>
-    </view>
-  <!-- </scroll-view> -->
+  <view class="container">
+    <ec-canvas id="mychart" canvas-id="mychart-scatter" ec="{{ ec }}"></ec-canvas>
+  </view>
   <view class="footer" wx:if="{{!planId}}">
     <button data-disabled="1" bindtap="savePlan" type="primary" size="mini">保存</button>
     <button data-disabled="0" bindtap="launch" type="primary" size="mini">直接启动</button>
@@ -17,6 +15,6 @@
   <view class="footer" wx:else>
     <button data-disabled="1" bindtap="amend" type="primary" size="mini">保存修改</button>
     <button data-disabled="0" bindtap="amend" type="primary" size="mini">保存修改并启用</button>
-    <button bindtap="back" type="default" size="mini">返回列表</button>
+    <button data-disabled="0" bindtap="reset" type="default" size="mini">重置</button>
   </view>
 </view>

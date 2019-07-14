@@ -4,7 +4,6 @@ const interfaces = require('../../utils/data.js')
 const app = getApp();
 var Chart = null;
 var dataList = [];
-var k = 0;
 
 Page({
   data: {
@@ -14,7 +13,8 @@ Page({
     pointIdArr: [],
     planId: '',
     planName: '',
-    orderPlan: ''
+    orderPlan: '',
+    planNameList: ''
   },
 
   onLoad(options) {
@@ -22,6 +22,28 @@ Page({
   },
 
   onShow: function() {
+    // 获取方案列表，避免命名重复
+    const self = this
+    wx.showLoading({
+      title: '加载中...'
+    })
+    wx.request({
+      header: {
+        'content-type': 'application/json'
+      },
+      url: interfaces.listpage,
+      success(res) {
+        let planNameList = []
+        res.data.data.forEach(item => {
+          planNameList.push(item.name)
+        })
+        self.setData({
+          planNameList: planNameList
+        })
+        wx.hideLoading()
+      }
+    })
+
     this.setData({
       planId: app.globalData.planId,
       pointIdArr: app.globalData.pointIdArr,
@@ -107,9 +129,10 @@ Page({
 
   setOption(Chart) {
     Chart.on('click', params => {
-      k = 1
       let id = params.data.id;
       let value = params.data.value;
+      dataList[id].itemStyle = { color: '#000' }
+      dataList[id].symbolSize = 14
       if (this.data.pointIdArr) {
         let index = this.data.pointIdArr.findIndex(item => item.id == id);
         if (index == -1) {
@@ -117,8 +140,23 @@ Page({
             id,
             value
           });
+          
         } else {
           this.data.pointIdArr.splice(index, 1);
+          if (dataList[id].value[1] < 4) {
+            dataList[id].itemStyle = {
+              color: "#DC143C"
+            }
+          } else if (dataList[id].value[1] < 18) {
+            dataList[id].itemStyle = {
+              color: "#fff"
+            }
+          } else {
+            dataList[id].itemStyle = {
+              color: "#FFD700"
+            }
+          }
+          dataList[id].symbolSize = 12
         }
       } else {
         let pointIdArr = []
@@ -130,17 +168,11 @@ Page({
           pointIdArr: pointIdArr
         })
       }
-      this.data.pointIdArr.forEach(item => {
-        dataList[item.id].itemStyle = {
-          color: "#000"
-        }
-        dataList[item.id].symbolSize = 14
-      })
+      // console.log(this.data.pointIdArr)
+      // console.log(dataList)
       Chart.setOption(this.getOption());
     })
-    if (k === 0) {
-      Chart.setOption(this.getOption());
-    }
+    Chart.setOption(this.getOption());
   },
 
   getOption() {
@@ -240,7 +272,11 @@ Page({
       content: JSON.stringify(this.data.pointIdArr),
       disabled: e.currentTarget.dataset.disabled
     }
-
+    let temp = []
+    this.data.pointIdArr.forEach(item => {
+      temp.push(item.id)
+    })
+    temp = temp.sort(this.sortNum)
     wx.request({
       url: interfaces.amendPlan + '/' + params.id,
       method: 'put',
@@ -252,9 +288,16 @@ Page({
             icon: 'success',
             duration: 2000
           })
-          wx.switchTab({
-            url: '../list/list',
-          })
+          if (e.currentTarget.dataset.disabled == 0) {
+            app.globalData.orderPlan = 'z' + temp.join(",") + ',;'
+            wx.switchTab({
+              url: '../functionPage/functionPage',
+            })
+          } else {
+            wx.switchTab({
+              url: '../list/list',
+            })
+          }
         }
       }
     })
@@ -266,7 +309,7 @@ Page({
     })
   },
 
-  // 保存方案
+  // 新建并保存方案
   savePlan(e) {
     if (!this.data.planName) {
       wx.showToast({
@@ -275,12 +318,27 @@ Page({
         duration: 2000
       })
       return;
+    }else{
+      if(this.data.planNameList.findIndex(item => item === this.data.planName) != -1){
+        wx.showToast({
+          title: '方案名称重复',
+          icon: 'none',
+          duration: 2000
+        })
+        return;
+      }
     }
     let sendData = {
       name: this.data.planName,
       content: JSON.stringify(this.data.pointIdArr),
       disabled: e.currentTarget.dataset.disabled
     }
+    let temp = []
+    this.data.pointIdArr.forEach(item => {
+      temp.push(item.id)
+    })
+    temp = temp.sort(this.sortNum)
+    
     wx.request({
       url: interfaces.addPlan,
       method: 'post',
@@ -291,12 +349,22 @@ Page({
           icon: 'success',
           duration: 2000
         })
+        if (e.currentTarget.dataset.disabled == 0){
+          app.globalData.orderPlan = 'z' + temp.join(",") + ',;'
+          wx.switchTab({
+            url: '../functionPage/functionPage',
+          })
+        }else{
+          wx.switchTab({
+            url: '../list/list',
+          })
+        }
       }
     })
   },
 
   reset(e) {
-    // this.data.pointIdArr = []
+    Chart.clear()
     this.data.pointIdArr.forEach(item => {
       let color = ''
       if (item.value[1] < 4) {
@@ -311,19 +379,24 @@ Page({
       }
       dataList[item.id].symbolSize = 12
     })
-    Chart.setOption(this.getOption());
-    this.setData({
-      pointIdArr: [],
-      planName: ''
-    })
+    app.globalData.pointIdArr = []
+    this.init_echarts()
+    // Chart.setOption(this.getOption());
   },
 
-  back(e) {
-    this.reset();
-    setTimeout(() => {
-      wx.switchTab({
-        url: '../list/list',
-      })
-    }, 800)
+  sortNum(a, b) {
+    return a - b
+  },
+
+  launch(e){
+    let temp = []
+    this.data.pointIdArr.forEach(item => {
+      temp.push(item.id)
+    })
+    temp = temp.sort(this.sortNum)
+    app.globalData.orderPlan = 'z' + temp.join(",") + ',;'
+    wx.switchTab({
+      url: '../functionPage/functionPage',
+    })
   }
 })
