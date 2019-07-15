@@ -67,7 +67,12 @@ Page({
             item.disabled_name = item.disabled === 0 ? '启用' : '禁用'
             if(item.disabled === 0){
               getApp().globalData.orderPlan = 'z' + temp.join(",") + ',;'
-              console.log(getApp().globalData.orderPlan)
+              // console.log(getApp().globalData.orderPlan)
+              wx.switchTab({
+                url: '../functionPage/functionPage',
+              })
+            }else{
+              getApp().globalData.orderPlan = 'z;'
               wx.switchTab({
                 url: '../functionPage/functionPage',
               })

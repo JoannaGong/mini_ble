@@ -63,5 +63,5 @@ module.exports = {
   stringToBytes: stringToBytes,
   ab2hext: ab2hext,
   hexToString: hexToString,
-  versionCompare: versionCompare
+  versionCompare: versionCompare,
 }

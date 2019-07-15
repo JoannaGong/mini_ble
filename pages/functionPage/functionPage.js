@@ -164,6 +164,7 @@ Page({
   onBLECharacteristicValueChange: function () {
     var that = this;
     wx.onBLECharacteristicValueChange(function (res) {
+      console.log(res)
       var resValue = utils.ab2hext(res.value); //16进制字符串
       var resValueStr = utils.hexToString(resValue);
       var log0 = that.data.textLog + "成功获取：" + resValueStr + "\n";
@@ -180,52 +181,6 @@ Page({
     })
   },
 
-  // 分包发送数据
-  writeTest(msg){
-    let buffer = hexStringToArrayBuffer(msg);
-    let pos = 0;
-    let bytes = buffer.byteLength;
-    console.log("bytes", bytes)
-    while (bytes > 0) {
-      let tmpBuffer;
-      if (bytes > 20) {
-        return delay(0.25).then(() => {
-          tmpBuffer = buffer.slice(pos, pos + 20);
-          pos += 20;
-          bytes -= 20;
-          console.log("tmpBuffer", tmpBuffer)
-          wx.writeBLECharacteristicValue({
-            deviceId: deviceId,
-            serviceId: serviceId,
-            characteristicId: writeId,
-            value: tmpBuffer,
-            success(res) {
-              console.log('第一次发送', res)
-            }
-          })
-        })
-      } else {
-        return delay(0.25).then(() => {
-          tmpBuffer = buffer.slice(pos, pos + bytes);
-          pos += bytes;
-          bytes -= bytes;
-          wx.writeBLECharacteristicValue({
-            deviceId: deviceId,
-            serviceId: serviceId,
-            characteristicId: writeId,
-            value: tmpBuffer,
-            success(res) {
-              console.log('第二次发送', res)
-            },
-            fail: function (res) {
-              console.log('发送失败', res)
-            }
-          })
-        })
-      }
-    }
-  },
-
   //发送指令
   sentOrder: function (e) {
     var that = this;
@@ -234,16 +189,13 @@ Page({
     }else{
       var orderStr = that.data.orderInputStr;//指令
     }
-    let order = utils.stringToBytes(orderStr);
-    that.writeBLECharacteristicValue(order);
-    console.log(order)
-    console.log(orderStr)
-    wx.showToast({
-      title: '发送成功！',
-      icon: 'success',
-      duration: 500
-    })
-    setTimeout(()=>{
+    if (!(this.data.accountInputStr && orderStr)){
+      app.showModal("数据为空!")
+    }else{
+      let order = utils.stringToBytes(orderStr);
+      that.writeBLECharacteristicValue(order);
+    }
+    setTimeout(() => {
       this.setData({
         accountInputStr: ''
       })
@@ -269,7 +221,7 @@ Page({
       success: function (res) {
         if (byteLength > 20) {
           setTimeout(function () {
-            // that.writeBLECharacteristicValue(order.slice(20, byteLength));
+            that.writeBLECharacteristicValue(order.slice(20, byteLength));
           }, 150);
         }
         var log = that.data.textLog + "写入成功：" + res.errMsg + "\n";
@@ -277,14 +229,12 @@ Page({
           textLog: log,
         });
       },
-
       fail: function (res) {
         var log = that.data.textLog + "写入失败" + res.errMsg + "\n";
         that.setData({
           textLog: log,
         });
       }
-
     })
   },
 
