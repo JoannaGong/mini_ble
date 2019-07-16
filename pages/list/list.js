@@ -34,6 +34,7 @@ Page({
   },
 
   // 启用/禁用切换
+  /**
   handleClick(e) {
     const self = this
     const msg = e.currentTarget.dataset.disabled === 0 ? '禁用成功' : '启用成功'
@@ -67,7 +68,6 @@ Page({
             item.disabled_name = item.disabled === 0 ? '启用' : '禁用'
             if(item.disabled === 0){
               getApp().globalData.orderPlan = 'z' + temp.join(",") + ',;'
-              // console.log(getApp().globalData.orderPlan)
               wx.switchTab({
                 url: '../functionPage/functionPage',
               })
@@ -90,17 +90,11 @@ Page({
           icon: 'success',
           duration: 1000
         })
-
-        // if(planList[index].disabled === 0){
-        //   getApp().globalData.orderPlan = 'z' + temp.join(",") + ',;'
-        //   wx.switchTab({
-        //     url: '../functionPage/functionPage',
-        //   })
-        // }
         wx.hideLoading()
       }
     })
   },
+  */
 
   // 修改
   toCheck(e) {
@@ -109,9 +103,6 @@ Page({
     app.globalData.planName = e.currentTarget.dataset.name
     wx.switchTab({
       url: '../plan/plan',
-      success(res){
-        // console.log(res)
-      }
     })
   },
 

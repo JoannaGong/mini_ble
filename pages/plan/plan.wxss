@@ -7,7 +7,7 @@
   height: 1200rpx;
   background: #999;
   padding: 20rpx 2rpx 5rpx;
-} 
+}
 
 ec-canvas {
   width: 100%;
@@ -24,6 +24,10 @@ ec-canvas {
 .footer {
   display: flex;
   justify-content: space-evenly;
-  margin: 15rpx 0;
-  padding: 0 5rpx;
+  margin: 15rpx 0 25rpx;
+  padding: 20rpx 5rpx;
+}
+
+.footer button {
+  padding: 20rpx 30rpx;
 }

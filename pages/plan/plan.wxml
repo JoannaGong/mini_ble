@@ -8,13 +8,12 @@
   </view>
   <view class="footer" wx:if="{{!planId}}">
     <button data-disabled="1" bindtap="savePlan" type="primary" size="mini">保存</button>
-    <button data-disabled="0" bindtap="launch" type="primary" size="mini">直接启动</button>
-    <button data-disabled="0" bindtap="savePlan" type="primary" size="mini">保存并启用</button>
+    <button data-disabled="0" bindtap="launch" type="primary" size="mini">点亮</button>
     <button class="btn" bindtap="reset" type="default" size="mini">重置</button>
   </view>
   <view class="footer" wx:else>
-    <button data-disabled="1" bindtap="amend" type="primary" size="mini">保存修改</button>
-    <button data-disabled="0" bindtap="amend" type="primary" size="mini">保存修改并启用</button>
+    <button data-disabled="1" bindtap="amend" type="primary" size="mini">保存</button>
+    <button data-disabled="0" bindtap="launch" type="primary" size="mini">点亮</button>
     <button data-disabled="0" bindtap="reset" type="default" size="mini">重置</button>
   </view>
 </view>

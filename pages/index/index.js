@@ -322,7 +322,7 @@ Page({
             app.globalData.deviceId = encodeURIComponent(devId)
             app.globalData.serviceId = encodeURIComponent(res.services[i].uuid)
             wx.switchTab({
-              url: '../functionPage/functionPage',
+              url: '../plan/plan',
             })
             return
           }

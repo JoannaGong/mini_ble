@@ -1,11 +1,6 @@
-// pages/funtionPage/funtionPage.js
 var app = getApp();
 var utils = require("../../utils/util.js");
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     textLog: "",
     deviceId: "",
@@ -20,16 +15,6 @@ Page({
     orderPlan: ''
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
   onShow: function () {
     var that = this;
     var devid = decodeURIComponent(app.globalData.deviceId);
@@ -48,14 +33,7 @@ Page({
     //获取特征值
     that.getBLEDeviceCharacteristics();
 
-    if (wx.setKeepScreenOn) {
-      wx.setKeepScreenOn({
-        keepScreenOn: true,
-        success: function (res) {
-          //console.log('保持屏幕常亮')
-        }
-      })
-    }
+        
   },
 
   //清空log日志

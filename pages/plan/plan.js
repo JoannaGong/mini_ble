@@ -1,4 +1,5 @@
 import * as echarts from '../../ec-canvas/echarts.js';
+var utils = require("../../utils/util.js");
 
 const interfaces = require('../../utils/data.js')
 const app = getApp();
@@ -14,7 +15,17 @@ Page({
     planId: '',
     planName: '',
     orderPlan: '',
-    planNameList: ''
+    planNameList: '',
+    textLog: "",
+    deviceId: "",
+    name: "",
+    allRes: "",
+    serviceId: "",
+    readCharacteristicId: "",
+    writeCharacteristicId: "",
+    notifyCharacteristicId: "",
+    connected: true,
+    canWrite: false,
   },
 
   onLoad(options) {
@@ -22,22 +33,20 @@ Page({
   },
 
   onShow: function() {
+    console.log(app.globalData.pointIdArr)
     // 获取方案列表，避免命名重复
-    const self = this
+    const that = this
     wx.showLoading({
       title: '加载中...'
     })
     wx.request({
-      header: {
-        'content-type': 'application/json'
-      },
       url: interfaces.listpage,
       success(res) {
         let planNameList = []
         res.data.data.forEach(item => {
           planNameList.push(item.name)
         })
-        self.setData({
+        that.setData({
           planNameList: planNameList
         })
         wx.hideLoading()
@@ -66,23 +75,22 @@ Page({
 
     let x = 0;
     let y = 1;
-    for (let id = 21; id < 220; id++) {
-      dataAll.push({
-        id: id,
-        value: [x, y]
-      })
-
+    for (let id = 21; id < 219; id++) {
       y = parseInt((id - 21) / 11) + 1;
       if (y % 2 == 0) {
         x = 20 - 2 * ((id - 21) % 11);
       } else {
         x = 0 + 2 * ((id - 21) % 11);
       }
+      dataAll.push({
+        id: id,
+        value: [x, y]
+      })
     }
 
     dataList = dataAll.map((item, index) => {
       let color = "";
-      let symbolSize = 12
+      let symbolSize = 16
       if (item.value[1] < 4) {
         color = "#DC143C"
       } else if (item.value[1] < 18) {
@@ -99,13 +107,12 @@ Page({
       }
     })
 
-
     if (app.globalData.planId) {
       app.globalData.pointIdArr.forEach(item => {
         dataList[item.id].itemStyle = {
           color: "#000"
         }
-        dataList[item.id].symbolSize = 14
+        dataList[item.id].symbolSize = 18
       })
     }
 
@@ -113,6 +120,30 @@ Page({
       this.init_echarts(); //初始化图表
     } else {
       this.setOption(Chart); //更新数据
+    }
+
+    // 蓝牙连接部分
+    var devid = decodeURIComponent(app.globalData.deviceId);
+    var devname = decodeURIComponent(app.globalData.name);
+    var devserviceid = decodeURIComponent(app.globalData.serviceId);
+    var log = that.data.textLog + "设备名=" + devname + "\n设备UUID=" + devid + "\n服务UUID=" + devserviceid + "\n";
+    this.setData({
+      textLog: log,
+      deviceId: devid,
+      name: devname,
+      serviceId: devserviceid
+    });
+
+    //获取特征值
+    that.getBLEDeviceCharacteristics();
+
+    if (wx.setKeepScreenOn) {
+      wx.setKeepScreenOn({
+        keepScreenOn: true,
+        success: function (res) {
+          //console.log('保持屏幕常亮')
+        }
+      })
     }
   },
 
@@ -132,7 +163,7 @@ Page({
       let id = params.data.id;
       let value = params.data.value;
       dataList[id].itemStyle = { color: '#000' }
-      dataList[id].symbolSize = 14
+      dataList[id].symbolSize = 18
       if (this.data.pointIdArr) {
         let index = this.data.pointIdArr.findIndex(item => item.id == id);
         if (index == -1) {
@@ -140,7 +171,6 @@ Page({
             id,
             value
           });
-          
         } else {
           this.data.pointIdArr.splice(index, 1);
           if (dataList[id].value[1] < 4) {
@@ -156,7 +186,7 @@ Page({
               color: "#FFD700"
             }
           }
-          dataList[id].symbolSize = 12
+          dataList[id].symbolSize = 16
         }
       } else {
         let pointIdArr = []
@@ -181,7 +211,7 @@ Page({
         top: 0,
         left: 0,
         right: 10,
-        bottom: 40,
+        bottom: 50,
         width: '100%',
         containLabel: true
       }],
@@ -289,7 +319,7 @@ Page({
             duration: 2000
           })
           if (e.currentTarget.dataset.disabled == 0) {
-            app.globalData.orderPlan = 'z' + temp.join(",") + ',;'
+            this.data.orderPlan = 'z' + temp.join(",") + ',;'
             wx.switchTab({
               url: '../functionPage/functionPage',
             })
@@ -350,7 +380,7 @@ Page({
           duration: 2000
         })
         if (e.currentTarget.dataset.disabled == 0){
-          app.globalData.orderPlan = 'z' + temp.join(",") + ',;'
+          this.data.orderPlan = 'z' + temp.join(",") + ',;'
           wx.switchTab({
             url: '../functionPage/functionPage',
           })
@@ -364,6 +394,10 @@ Page({
   },
 
   reset(e) {
+    var that = this;
+    var orderStr = 'z;';//指令
+    let order = utils.stringToBytes(orderStr);
+    that.writeBLECharacteristicValue(order);
     Chart.clear()
     this.data.pointIdArr.forEach(item => {
       let color = ''
@@ -377,10 +411,16 @@ Page({
       dataList[item.id].itemStyle = {
         color: color
       }
-      dataList[item.id].symbolSize = 12
+      dataList[item.id].symbolSize = 16
     })
     app.globalData.pointIdArr = []
+    this.setData({
+      pointIdArr: []
+    })
+    console.log(this.data.pointIdArr)
     this.init_echarts()
+
+    
     // Chart.setOption(this.getOption());
   },
 
@@ -389,14 +429,142 @@ Page({
   },
 
   launch(e){
-    let temp = []
-    this.data.pointIdArr.forEach(item => {
-      temp.push(item.id)
+    var that = this;
+    if(!this.data.pointIdArr){
+      app.showModal("数据为空!")
+      return
+    }else{
+      let temp = []
+      this.data.pointIdArr.forEach(item => {
+        temp.push(item.id)
+      })
+      temp = temp.sort(this.sortNum)
+      this.setData({
+        orderPlan: 'z' + temp.join(",") + ',;'
+      })
+        
+      var orderStr = this.data.orderPlan;//指令
+      if(orderStr == 'z,;'){
+        orderStr = 'z;'
+      }
+      let order = utils.stringToBytes(orderStr);
+      that.writeBLECharacteristicValue(order);
+    }
+  },
+
+  //获取蓝牙设备某个服务中的所有 characteristic（特征值）
+  getBLEDeviceCharacteristics: function (order) {
+    var that = this;
+    wx.getBLEDeviceCharacteristics({
+      deviceId: that.data.deviceId,
+      serviceId: that.data.serviceId,
+      success: function (res) {
+        for (let i = 0; i < res.characteristics.length; i++) {
+          let item = res.characteristics[i]
+          if (item.properties.read) {//该特征值是否支持 read 操作
+            var log = that.data.textLog + "该特征值支持 read 操作:" + item.uuid + "\n";
+            that.setData({
+              textLog: log,
+              readCharacteristicId: item.uuid
+            });
+          }
+          if (item.properties.write) {//该特征值是否支持 write 操作
+            var log = that.data.textLog + "该特征值支持 write 操作:" + item.uuid + "\n";
+            that.setData({
+              textLog: log,
+              writeCharacteristicId: item.uuid,
+              canWrite: true
+            });
+          }
+          if (item.properties.notify || item.properties.indicate) {//该特征值是否支持 notify或indicate 操作
+            var log = that.data.textLog + "该特征值支持 notify 操作:" + item.uuid + "\n";
+            that.setData({
+              textLog: log,
+              notifyCharacteristicId: item.uuid,
+            });
+            that.notifyBLECharacteristicValueChange();
+          }
+        }
+      }
     })
-    temp = temp.sort(this.sortNum)
-    app.globalData.orderPlan = 'z' + temp.join(",") + ',;'
-    wx.switchTab({
-      url: '../functionPage/functionPage',
+    // that.onBLECharacteristicValueChange();   //监听特征值变化
+  },
+
+  //启用低功耗蓝牙设备特征值变化时的 notify 功能，订阅特征值。
+  //注意：必须设备的特征值支持notify或者indicate才可以成功调用，具体参照 characteristic 的 properties 属性
+  notifyBLECharacteristicValueChange: function () {
+    var that = this;
+    wx.notifyBLECharacteristicValueChange({
+      state: true, // 启用 notify 功能
+      deviceId: that.data.deviceId,
+      serviceId: that.data.serviceId,
+      characteristicId: that.data.notifyCharacteristicId,
+      success: function (res) {
+        var log = that.data.textLog + "notify启动成功" + res.errMsg + "\n";
+        that.setData({
+          textLog: log,
+        });
+        that.onBLECharacteristicValueChange();   //监听特征值变化
+      },
+      fail: function (res) {
+        wx.showToast({
+          title: 'notify启动失败',
+          mask: true
+        });
+        setTimeout(function () {
+          wx.hideToast();
+        }, 2000)
+      }
+
     })
-  }
+
+  },
+  //监听低功耗蓝牙设备的特征值变化。必须先启用notify接口才能接收到设备推送的notification。
+  onBLECharacteristicValueChange: function () {
+    var that = this;
+    wx.onBLECharacteristicValueChange(function (res) {
+      var resValue = utils.ab2hext(res.value); //16进制字符串
+      var resValueStr = utils.hexToString(resValue);
+      var log0 = that.data.textLog + "成功获取：" + resValueStr + "\n";
+      that.setData({
+        textLog: log0,
+      });
+
+    });
+  },
+
+  //向低功耗蓝牙设备特征值中写入二进制数据。
+  //注意：必须设备的特征值支持write才可以成功调用，具体参照 characteristic 的 properties 属性
+  writeBLECharacteristicValue: function (order) {
+    var that = this;
+    let byteLength = order.byteLength;
+    var log = that.data.textLog + "当前执行指令的字节长度:" + byteLength + "\n";
+    that.setData({
+      textLog: log,
+    });
+    wx.writeBLECharacteristicValue({
+      deviceId: that.data.deviceId,
+      serviceId: that.data.serviceId,
+      characteristicId: that.data.writeCharacteristicId,
+      // 这里的value是ArrayBuffer类型
+      value: order.slice(0, 20),
+      success: function (res) {
+        if (byteLength > 20) {
+          setTimeout(function () {
+            that.writeBLECharacteristicValue(order.slice(20, byteLength));
+          }, 150);
+        }
+        var log = that.data.textLog + "写入成功：" + res.errMsg + "\n";
+        that.setData({
+          textLog: log,
+        });
+      },
+      fail: function (res) {
+        var log = that.data.textLog + "写入失败" + res.errMsg + "\n";
+        that.setData({
+          textLog: log,
+        });
+      }
+    })
+  },
 })
